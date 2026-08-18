@@ -10,7 +10,7 @@ class Bola:
         self.vx = vx
         self.vy = vy
         self.gravidade = 0.9
-        self.arrasto = 0.1
+        self.arrasto = 0.05
         self.cor = cor
         
     def desenhar(self):
@@ -21,19 +21,23 @@ class Bola:
             
         self.vy += self.gravidade
         self.y += self.vy
+        
         if self.vx > 0:
             self.vx -= self.arrasto
-            if self.vx <= 0:
-                self.x = 0
+            if self.vx < 0:
+                self.vx = 0
                 
-        if self.vx < 0:
+        elif self.vx < 0:
             self.vx += self.arrasto
             if self.vx > 0:
                 self.vx = 0
         self.x += self.vx
         
     def quique(self):
-        
+        if self.y <= 0:
+            self.y = 0
+            self.vy = -(self.vy / 1.5)
+            
         if self.y >= 119:
             self.y = 119
             self.vy = -(self.vy / 1.5)
@@ -52,8 +56,6 @@ class Bola:
             self.x = 0
         if self.x >= 159:
             self.x = 159
-        if self.y <= 0:
-            self.y = 0
         if self.y >= 119:
             self.y = 119
             
@@ -81,11 +83,10 @@ def update():
         objeto.quique()
     
 def draw():
-    
     for objeto in lista:
         objeto.desenhar()
-        
-pyxel.init(161,121,fps = 30)
+
+pyxel.init(160,120)
 pyxel.run(update,draw)
 
     
