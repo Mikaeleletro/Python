@@ -1,64 +1,86 @@
 import pyxel
 
-class Objeto:
+
+class Bola:
     
-    def __init__(self,x,y):
+    def __init__(self,vx,vy,cor):
         
-        self.x = x
-        self.y = y
-        self.vx = 5
-        self.vy = 0
+        self.x = 10
+        self.y = 60
+        self.vx = vx
+        self.vy = vy
         self.gravidade = 0.9
         self.arrasto = 0.1
+        self.cor = cor
         
+    def desenhar(self):
+        pyxel.pset(self.x,self.y,self.cor)
         
-    def colisao(self):
-        
-        if self.x <= 0:
-            self.x = 0
-        if self.x >= 158:
-            self.x = 158
-        if self.y <= 0:
-            self.y = 0
-        if self.y >= 118:
-            self.y = 118
+    def queda(self):
             
-    def quique(self):
-        
-        if self.y >= 118:
-            self.vy = -(self.vy / 1.5)
-        if self.x >= 159:
-            self.vx = -(self.vx / 1.5)
-            
-    def velocidade(self):
-    
         self.vy += self.gravidade
         self.y += self.vy
         if self.vx > 0:
             self.vx -= self.arrasto
-            self.x += self.vx
+            if self.vx == 0:
+                self.x = 0
+                
+        if self.vx < 0:
+            self.vx += self.arrasto
+            if self.vx > 0:
+                self.vx = 0
+        self.x += self.vx
         
-    def desenhar(self):
+    def quique(self):
         
-        pyxel.rect(self.x,self.y,2,2,7)
-        
-
-objeto = Objeto(51,0)
-
-def update():
-    objeto.velocidade()
-    objeto.colisao()
-    objeto.quique()
+        if self.y >= 119:
+            self.vy = -(self.vy / 1.5)
+        if self.x >= 159:
+            self.vx = -(self.vx/1.5)
+        if self.x <= 0:
+            self.vx = -(self.vx/1.5)
             
         
-     
+    def colicao(self):
+        if self.x <= 0:
+            self.x = 0
+        if self.x >= 159:
+            self.x = 159
+        if self.y <= 0:
+            self.y = 0
+        if self.y >= 119:
+            self.y = 119
+            
+quantidade = int(input("quantos objetos quer?(máximo 15)"))
+i = 1
+lista = []
+while i <= quantidade:
+    
+    a = int(input(f"qual velocidade vx{i}:..."))
+    b = int(input(f"qual velocidade vy{i}:..."))
+    
+    if i <= 15:
+        lista.append(Bola(a,b,i))
+        i += 1
+    elif i <= 0:
+        print("numero inválido...")
+    else:
+        print("numero maximo: 15")
+        
+def update():
+    for objeto in lista:
+        objeto.queda()
+        objeto.colicao()
+        objeto.quique()
+    
 def draw():
     
-    pyxel.cls(0)
-    objeto.desenhar()
-    
-pyxel.init(160,120)
+    for objeto in lista:
+        objeto.desenhar()
+        
+pyxel.init(161,121,fps = 30)
 pyxel.run(update,draw)
-            
-            
+
     
+        
+        
