@@ -1,5 +1,37 @@
 #survival vampire
 import pyxel
+
+class Coracao():
+
+    def __init__(self):
+
+        hp = 50
+
+    def desenhar(self):
+
+        pyxel.rect(80,80,4,4,7)
+
+class Inimigo():
+
+    def __init__(self,x,y):
+
+        self.y = y
+        self.x = x
+
+    def movimento(self):
+        if jogador.x < self.x:
+            self.x -= 1
+        if jogador.x > self.x:
+            self.x += 1
+        if jogador.y < self.y:
+            self.y -= 1
+        if jogador.y > self.y:
+            self.y += 1
+
+    def desenhar(self):
+        pyxel.pset(self.x,self.y,7)
+
+
 class Personagem():
     def __init__(self):
         
@@ -26,6 +58,7 @@ class Personagem():
             self.direcao = "direita"
             
     def desenhar(self):
+
         x = pyxel.mouse_x
         y = pyxel.mouse_y
         
@@ -60,18 +93,22 @@ class Personagem():
             self.y = 0
     
 jogador = Personagem()
-
+inimigo = Inimigo(5,5)
+coracao = Coracao()
 def update():
     
     jogador.movimento()
     jogador.colicao()
-    
+    inimigo.movimento()
+
 def draw():
     
     pyxel.cls(0)
     jogador.desenhar()
+    inimigo.desenhar()
+    coracao.desenhar()
     pyxel.text(0,0,f"{jogador.direcao}",7)
     
-pyxel.init(160,120)
+pyxel.init(161,161)
 pyxel.run(update,draw)
         
